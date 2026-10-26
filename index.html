@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Math 1 Midterm Jeopardy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --paper:#F5F9FD; --grid:rgba(75,156,211,.13); --surface:#FFFFFF; --ink:#13283D; --muted:#4F6478; --line:#D3DFEA;
+  --blue:#4B9CD3; --blue-deep:#1B67A0; --blue-soft:#E4F1FA;
+  --orange:#F56600; --orange-deep:#B04400; --orange-soft:#FFEDE0;
+  --green:#1D7F52; --green-soft:#E2F5EA; --red:#B3261E; --red-soft:#FCE9E7;
+  --tile:#124A82; --tile-ink:#FFB070; --tile-used:#DCE7F1; --cat:#4B9CD3; --cat-ink:#0B1E31;
+  --btn-bg:#1B67A0; --btn-ink:#FFFFFF; --veil:rgba(10,24,40,.78);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0B1622; --grid:rgba(108,179,227,.08); --surface:#16273A; --ink:#E8F0F7; --muted:#9DB2C5; --line:#2C4259;
+    --blue:#6CB3E3; --blue-deep:#8CC6F0; --blue-soft:#1B3A55;
+    --orange:#FF8A3D; --orange-deep:#FFA566; --orange-soft:#3A2414;
+    --green:#5CCB93; --green-soft:#153427; --red:#FF8F86; --red-soft:#3C1B19;
+    --tile:#17558F; --tile-ink:#FFB878; --tile-used:#14283B; --cat:#6CB3E3; --cat-ink:#08141F;
+    --btn-bg:#6CB3E3; --btn-ink:#0B1622; --veil:rgba(2,8,14,.82);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0B1622; --grid:rgba(108,179,227,.08); --surface:#16273A; --ink:#E8F0F7; --muted:#9DB2C5; --line:#2C4259;
+  --blue:#6CB3E3; --blue-deep:#8CC6F0; --blue-soft:#1B3A55;
+  --orange:#FF8A3D; --orange-deep:#FFA566; --orange-soft:#3A2414;
+  --green:#5CCB93; --green-soft:#153427; --red:#FF8F86; --red-soft:#3C1B19;
+  --tile:#17558F; --tile-ink:#FFB878; --tile-used:#14283B; --cat:#6CB3E3; --cat-ink:#08141F;
+  --btn-bg:#6CB3E3; --btn-ink:#0B1622; --veil:rgba(2,8,14,.82);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{
+  margin:0;color:var(--ink);background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;
+  font:17px/1.5 'Atkinson Hyperlegible',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+}
+h1,h2,h3{font-family:'Bricolage Grotesque','Atkinson Hyperlegible',system-ui,sans-serif;line-height:1.12;margin:0;letter-spacing:-.01em}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.wrap{max-width:1200px;margin:0 auto;padding:14px 16px 60px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:4px 0 14px}
+.top h1{font-size:clamp(24px,4vw,36px);font-weight:800;letter-spacing:-.02em}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 18px;border-radius:9px;border:1.5px solid var(--line);background:var(--surface);font-weight:700}
+.btn:hover{border-color:var(--blue-deep)}
+.btn.primary{background:var(--btn-bg);color:var(--btn-ink);border-color:var(--btn-bg)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.small{min-height:38px;padding:6px 14px;font-size:15px}
+.btn[disabled]{opacity:.5;cursor:default}
+.btn.good{background:var(--green-soft);border-color:var(--green)}
+.btn.bad{background:var(--red-soft);border-color:var(--red)}
+.btn.good.on{background:var(--green);color:var(--btn-ink);border-color:var(--green)}
+.btn.bad.on{background:var(--red);color:var(--btn-ink);border-color:var(--red)}
+
+/* setup */
+.panel{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:22px 24px;max-width:720px}
+.panel h2{font-size:26px;font-weight:800;margin-bottom:8px}
+.panel p{margin:6px 0 14px;max-width:62ch;color:var(--muted)}
+.count{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}
+.count button{width:46px;height:46px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);font-weight:700}
+.count button[aria-pressed="true"]{background:var(--btn-bg);color:var(--btn-ink);border-color:var(--btn-bg)}
+.names{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:18px}
+.names label{display:block;font-size:14px;color:var(--muted);margin-bottom:3px}
+.names input{font:inherit;width:100%;padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);min-height:44px}
+
+/* board */
+.board-wrap{overflow-x:auto;padding-bottom:6px}
+.board{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;min-width:640px}
+.cat{background:var(--cat);color:var(--cat-ink);border-radius:8px;padding:10px 10px;min-height:84px;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(15px,1.9vw,22px);line-height:1.15}
+.tile{background:var(--tile);color:var(--tile-ink);border:0;border-radius:8px;min-height:clamp(70px,10vw,104px);font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(24px,3.6vw,44px);letter-spacing:-.01em}
+.tile:hover:not(.used){filter:brightness(1.15);transform:translateY(-1px)}
+.tile.used{background:var(--tile-used);cursor:default;box-shadow:inset 0 0 0 1.5px var(--line)}
+.score-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:18px}
+.team{background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.team .nm{font-weight:700;overflow-wrap:anywhere}
+.team .sc{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:34px;line-height:1}
+.team .sc.neg{color:var(--red)}
+.team .adj{display:flex;gap:6px}
+.team .adj button{border:1.5px solid var(--line);background:var(--surface);border-radius:8px;min-height:36px;padding:2px 10px;font-weight:700;font-size:14px}
+.hint{color:var(--muted);font-size:15px;margin:10px 0 0}
+
+/* overlay + clue */
+.overlay{position:fixed;inset:0;z-index:20;background:var(--veil);overflow:auto;padding:calc(14px + env(safe-area-inset-top,0px)) 14px calc(14px + env(safe-area-inset-bottom,0px));display:flex;align-items:flex-start;justify-content:center}
+.card{background:var(--surface);color:var(--ink);border-radius:14px;border:1.5px solid var(--line);width:100%;max-width:980px;padding:clamp(18px,3vw,34px);margin:auto}
+.card-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;margin-bottom:14px}
+.card-head .cn{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(20px,2.4vw,28px)}
+.card-head .pv{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(22px,3vw,34px);color:var(--orange-deep)}
+.stem{font-size:clamp(20px,2.5vw,30px);margin:0 0 14px;max-width:46em}
+.ask{font-size:clamp(22px,2.9vw,34px);font-weight:700;margin:0 0 14px;max-width:44em;padding-left:16px;border-left:6px solid var(--orange)}
+.work{background:var(--paper);border:1.5px dashed var(--line);border-radius:10px;padding:12px 18px;margin:0 0 16px;font-size:clamp(19px,2.3vw,28px);line-height:1.8;display:inline-block;min-width:min(100%,320px)}
+.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:0 0 16px}
+.duo .work{display:block;margin:0}
+.duo h3{font-size:16px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.ans{background:var(--green-soft);border:2px solid var(--green);border-radius:12px;padding:14px 18px;margin:16px 0}
+.ans .al{font-size:15px;color:var(--muted);font-weight:700}
+.ans .av{font-size:clamp(24px,3.2vw,38px);font-weight:700;margin:2px 0 6px}
+.ans .why{font-size:clamp(17px,1.9vw,22px);color:var(--ink);max-width:50em}
+.figbox{margin:0 0 16px}
+.figbox img{max-width:100%;max-height:46vh;border-radius:8px;border:1.5px solid var(--line);background:#fff}
+.nofig{border:2px dashed var(--orange);background:var(--orange-soft);border-radius:10px;padding:14px 16px;margin:0 0 16px;max-width:620px}
+.award{display:grid;gap:8px;margin:14px 0}
+.award .ar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between;border:1.5px solid var(--line);border-radius:10px;padding:8px 12px}
+.award .ar b{font-size:18px}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;align-items:center}
+.dd-banner{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(34px,6vw,64px);color:var(--orange-deep);margin:4px 0 10px}
+.wager{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.wager input{font:inherit;width:160px;padding:10px 12px;border:1.5px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);min-height:46px}
+.pick{display:flex;gap:8px;flex-wrap:wrap}
+.pick button{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 18px;min-height:44px;font-weight:700}
+.pick button[aria-pressed="true"]{background:var(--btn-bg);color:var(--btn-ink);border-color:var(--btn-bg)}
+.timer{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:32px;min-width:3ch}
+.timer.low{color:var(--red)}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.2;margin:0 .18em;font-size:.95em}
+.frac .n{border-bottom:2px solid currentColor;padding:0 .25em 1px}
+.frac .d{padding:1px .25em 0}
+
+/* figures panel */
+.slot{border:1.5px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 12px}
+.slot h3{font-size:18px;font-weight:800;margin-bottom:8px}
+.slot .sr{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start}
+.slot img{max-width:220px;max-height:140px;border:1.5px solid var(--line);border-radius:8px;background:#fff}
+.slot textarea{font:inherit;width:100%;min-height:74px;padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);margin-top:8px}
+.slot .pz{border:2px dashed var(--blue);background:var(--blue-soft);border-radius:9px;padding:10px 14px;font-size:15px}
+.slot .pz.active{border-color:var(--orange);background:var(--orange-soft)}
+.slot .grow{flex:1 1 260px}
+.msg{font-size:15px;color:var(--orange-deep);margin:6px 0 0;font-weight:700}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}.tile:hover{transform:none}}
+@media (max-width:520px){.wrap{padding:10px 10px 50px}.panel{padding:18px 16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Math 1 Midterm Jeopardy</h1>
+    <div class="row" id="topbtns"></div>
+  </header>
+  <main id="app"></main>
+</div>
+<div id="layer"></div>
+
+<script>
+/* ---------- helpers ---------- */
+var F = function (n, d) { return '<span class="frac"><span class="n">' + n + '</span><span class="d">' + d + '</span></span>'; };
+var M_ = '\u2212';
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function $(id) { return document.getElementById(id); }
+
+/* ---------- content ---------- */
+var CATS = ['Midpoints & Slope', 'Forms of a Line', 'Slope-Intercept & Models', 'Systems & Inequalities', 'Center & Spread', 'Regions & Shapes'];
+
+var STEPH = 'Stephanie is running a custom t-shirt design boutique. She sells tank tops, x, and short-sleeved shirts, y. She cannot make more than 20 total items in a week. The maximum number of short-sleeved shirts she can make is 8.';
+var JIM = 'Jim has earned $7,400 working through high school and has put it in a savings account to pay his car payment. Every month $250 is removed for the car payment, and that amount is the only amount taken out.';
+var BOOST = 'The BR Booster Club is selling t-shirts at Friday’s football game. With a chance of rain in the forecast, the club decides to rent a tent for $40 to sell under. Each shirt also costs the club $4.50 to print. The Booster Club sells each shirt for $15.';
+var POINTSLOPE = 'Given the equation y ' + M_ + ' 3 = ' + F(1, 2) + '(x + 4),';
+var STDFORM = 'Consider the linear equation 5.5x ' + M_ + ' 2.5y = 20.';
+var SAM = 'Below are the test scores for Sam from AP US History: 80, 78, 84, 89, 82.';
+var DIST = 'Fill out the table for each distribution.';
+var DISTASK = 'For this distribution, give: <b>Outliers?</b> (yes or no), <b>Shape?</b> (symmetric, skewed right, or skewed left), <b>Mean compared to median?</b> (mean &gt; median, mean &lt; median, or mean = median), <b>Best measure of center?</b> (mean or median), and <b>Best measure of spread?</b> (standard deviation or IQR).';
+
+/* clue = {id, cat, value, stem, ask, work, duo, ans, why, fig} ; fig = slot id for clues that need a picture + teacher answer */
+var CLUES = [
+  /* Midpoints & Slope */
+  { id: '2a', cat: 0, value: 100, stem: 'Consider the line 3x + 2y = ' + M_ + '4.', ask: 'Find the slope for lines that are <b>parallel</b> to this line.',
+    ans: M_ + F(3, 2), why: 'Solve for y: y = ' + M_ + F(3, 2) + 'x ' + M_ + ' 2. Parallel lines have the same slope.' },
+  { id: '2b', cat: 0, value: 200, stem: 'Consider the line 3x + 2y = ' + M_ + '4.', ask: 'Find the slope for lines that are <b>perpendicular</b> to this line.',
+    ans: F(2, 3), why: 'The line’s slope is ' + M_ + F(3, 2) + '. Perpendicular slopes are negative reciprocals: flip it and change the sign.' },
+  { id: '1', cat: 0, value: 300, stem: 'The midpoint for line segment AB is located at (3, 6). Given A(1, 3),', ask: 'find the other endpoint, B.',
+    ans: 'B = (5, 9)', why: 'x: ' + F('1 + x', 2) + ' = 3, so x = 5. y: ' + F('3 + y', 2) + ' = 6, so y = 9.' },
+  { id: '14', cat: 0, value: 400, stem: 'The midpoint for line segment XY is (' + M_ + '1, ' + M_ + '2). Given X(' + M_ + '3, ' + M_ + '7),', ask: 'find the other endpoint, Y.',
+    ans: 'Y = (1, 3)', why: 'x: ' + F(M_ + '3 + x', 2) + ' = ' + M_ + '1, so x = 1. y: ' + F(M_ + '7 + y', 2) + ' = ' + M_ + '2, so y = 3.' },
+  { id: '15', cat: 0, value: 500, stem: 'Consider the line y = ' + F(2, 5) + 'x ' + M_ + ' 4.', ask: 'Find the <b>parallel</b> line that passes through the point (10, 14).',
+    ans: 'y = ' + F(2, 5) + 'x + 10', why: 'Parallel means the same slope, ' + F(2, 5) + '. Point-slope: y ' + M_ + ' 14 = ' + F(2, 5) + '(x ' + M_ + ' 10), which simplifies to y = ' + F(2, 5) + 'x + 10.' },
+
+  /* Forms of a Line */
+  { id: '6a', cat: 1, value: 100, stem: POINTSLOPE + ' find the following key part.', ask: 'The <b>slope</b>.',
+    ans: F(1, 2), why: 'Point-slope form, y ' + M_ + ' y<sub>1</sub> = m(x ' + M_ + ' x<sub>1</sub>), shows the slope m directly.' },
+  { id: '6b', cat: 1, value: 200, stem: POINTSLOPE + ' find the following key part.', ask: 'The <b>vertical (y-) intercept</b>.',
+    ans: '(0, 5)', why: 'Let x = 0: y ' + M_ + ' 3 = ' + F(1, 2) + '(4) = 2, so y = 5.' },
+  { id: '6c', cat: 1, value: 300, stem: POINTSLOPE + ' find the following key part.', ask: 'The <b>horizontal (x-) intercept</b>.',
+    ans: '(' + M_ + '10, 0)', why: 'Let y = 0: ' + M_ + '3 = ' + F(1, 2) + '(x + 4), so x + 4 = ' + M_ + '6 and x = ' + M_ + '10.' },
+  { id: '10', cat: 1, value: 400, stem: STDFORM, ask: '<b>Solve</b> the linear equation <b>for y</b>.',
+    ans: 'y = 2.2x ' + M_ + ' 8', why: M_ + '2.5y = ' + M_ + '5.5x + 20. Divide every term by ' + M_ + '2.5: y = 2.2x ' + M_ + ' 8.' },
+  { id: '7', cat: 1, value: 500, stem: POINTSLOPE, ask: '<b>solve for x</b>.',
+    ans: 'x = 2y ' + M_ + ' 10', why: 'Multiply both sides by 2: 2(y ' + M_ + ' 3) = x + 4. Then x = 2y ' + M_ + ' 6 ' + M_ + ' 4 = 2y ' + M_ + ' 10.' },
+
+  /* Slope-Intercept & Models */
+  { id: '11a', cat: 2, value: 100, stem: STDFORM, ask: 'Find the <b>slope</b> for this linear equation.',
+    ans: '2.2 (or ' + F(11, 5) + ')', why: 'Solving for y gives y = 2.2x ' + M_ + ' 8. Shortcut: ' + M_ + 'A/B = ' + M_ + '5.5 / ' + M_ + '2.5 = 2.2.' },
+  { id: '8a', cat: 2, value: 200, stem: JIM, ask: 'Write the <b>equation</b> that represents the account balance.',
+    ans: 'B = 7400 ' + M_ + ' 250m', why: 'He starts with $7,400 and loses $250 each month. B is the balance after m months.' },
+  { id: '8b', cat: 2, value: 300, stem: JIM, ask: 'When will there be <b>exactly $4,400</b> left in the account?',
+    ans: '12 months', why: '7400 ' + M_ + ' 250m = 4400, so 250m = 3000 and m = 12.' },
+  { id: '11b', cat: 2, value: 400, stem: STDFORM, ask: 'Find the <b>y-intercept</b> for this linear equation. Round to the hundredth place if necessary.',
+    ans: M_ + '8, the point (0, ' + M_ + '8)', why: 'Let x = 0: ' + M_ + '2.5y = 20, so y = ' + M_ + '8.' },
+  { id: '11c', cat: 2, value: 500, stem: STDFORM, ask: 'Find the <b>x-intercept</b> for this linear equation. Round to the hundredth place if necessary.',
+    ans: '\u2248 3.64, the point (3.64, 0)', why: 'Let y = 0: 5.5x = 20, so x = 20 \u00f7 5.5 = 3.6363\u2026 \u2248 3.64.' },
+
+  /* Systems & Inequalities */
+  { id: '17', cat: 3, value: 100, stem: BOOST, ask: 'Write the <b>inequality that represents profit</b>.',
+    ans: '15x ' + M_ + ' 4.50x ' + M_ + ' 40 &gt; 0', why: 'Profit = revenue ' + M_ + ' costs. Here x is the number of shirts sold: revenue is 15x, and costs are 4.50x for printing plus $40 for the tent. Profit means the result is greater than 0.' },
+  { id: '18', cat: 3, value: 200, stem: BOOST, ask: 'The inequality that represents profit is 15x ' + M_ + ' 4.50x ' + M_ + ' 40 &gt; 0. <b>Solve</b> it.',
+    ans: 'x &gt; ' + F(80, 21) + ' \u2248 3.81, so at least 4 shirts', why: 'Combine like terms: 10.5x ' + M_ + ' 40 &gt; 0, so 10.5x &gt; 40 and x &gt; 3.81. The club can only sell whole shirts, so it must sell at least 4.' },
+  { id: '3', cat: 3, value: 300, stem: 'Find the solution to the system of equations below.', work: '5x + 2y = 10<br>4x ' + M_ + ' 4y = 22', ask: 'Give the solution as an ordered pair (x, y).',
+    ans: '(3, ' + M_ + '2.5)', why: 'Multiply the first equation by 2: 10x + 4y = 20. Add it to the second equation: 14x = 42, so x = 3. Then 5(3) + 2y = 10, so y = ' + M_ + '2.5.' },
+  { id: '16', cat: 3, value: 400, stem: 'Consider the inequality ' + F('x ' + M_ + ' 5', 7) + ' \u2264 ' + F('2x', 3) + ' + 3.', ask: 'Find the <b>solution set</b> that will make the inequality true.',
+    ans: 'x \u2265 ' + M_ + F(78, 11) + ' (about ' + M_ + '7.09)', why: 'Multiply every term by 21 (positive, so no flip): 3(x ' + M_ + ' 5) \u2264 14x + 63. Then 3x ' + M_ + ' 15 \u2264 14x + 63, so ' + M_ + '78 \u2264 11x and x \u2265 ' + M_ + F(78, 11) + '.' },
+  { id: '19', cat: 3, value: 500, stem: 'Lin solved a system of equations below. Read over Lin’s work.',
+    duo: [
+      { h: 'Lin’s work', t: 'System: 3x ' + M_ + ' y = ' + M_ + '1 and 5x ' + M_ + ' y = 7<br>Substitute: 5x ' + M_ + ' (3x + 1) = 7<br>5x ' + M_ + ' 3x + 1 = 7<br>2x + 1 = 7<br>2x = 6<br>x = 2<br>y = 3(2) + 1<br>y = 7<br>(2, 7)' },
+      { h: 'Substitution: solve for y', t: '3x ' + M_ + ' y = ' + M_ + '1<br>' + M_ + 'y = ' + M_ + '3x ' + M_ + ' 1<br>y = 3x + 1' }
+    ],
+    ask: 'Find the <b>error</b>. Then find the <b>correct solution</b> to the system of equations.',
+    ans: 'Correct solution: (4, 13)', why: 'The error: the negative sign was not distributed. 5x ' + M_ + ' (3x + 1) = 5x ' + M_ + ' 3x <b>' + M_ + ' 1</b>, not + 1. Then 2x ' + M_ + ' 1 = 7, so x = 4 and y = 3(4) + 1 = 13.' },
+
+  /* Center & Spread */
+  { id: '9a', cat: 4, value: 100, stem: SAM, ask: 'Find the <b>median</b> of this data.',
+    ans: '82', why: 'In order: 78, 80, 82, 84, 89. The middle value is 82.' },
+  { id: '9b', cat: 4, value: 200, stem: SAM, ask: 'Find the <b>mean</b> of this data.',
+    ans: '82.6', why: '80 + 78 + 84 + 89 + 82 = 413, and 413 \u00f7 5 = 82.6.' },
+  { id: '9d', cat: 4, value: 300, stem: SAM, ask: 'What does the <b>MEDIAN</b> mean in this scenario?',
+    ans: 'Half of Sam’s scores are at or below 82, and half are at or above 82.', why: 'The median is the middle of the ordered scores, so it describes Sam’s typical middle score in AP US History: 82.' },
+  { id: '9c', cat: 4, value: 400, stem: SAM, ask: 'Find the <b>interquartile range</b> for this data.',
+    ans: '7.5', why: 'In order: 78, 80, 82, 84, 89. Leave the median (82) out. Q1 = (78 + 80) \u00f7 2 = 79 and Q3 = (84 + 89) \u00f7 2 = 86.5. IQR = 86.5 ' + M_ + ' 79 = 7.5.' },
+  { id: '12', cat: 4, value: 500, stem: 'The four box plots summarize the number of hours students spent studying per unit in four Math 1 classes (a, b, c, and d) at Ballantyne Ridge.', ask: '<b>List them from least to greatest by variability.</b>',
+    fig: 'fig12', figLabel: 'box plots', ans: '', why: 'Compare the width of each box (IQR) and the overall length of each plot (range). The narrowest box varies the least.' },
+
+  /* Regions & Shapes */
+  { id: '5', cat: 5, value: 100, stem: STEPH, ask: 'Identify which <b>region</b> represents the number of tank tops, x, and short-sleeved shirts, y, made in a week.',
+    fig: 'fig5', figLabel: 'region graph', ans: '', why: 'The region must satisfy x + y \u2264 20, y \u2264 8, x \u2265 0, and y \u2265 0 all at once.' },
+  { id: '13a', cat: 5, value: 200, stem: DIST + ' This clue: <b>Stock Returns</b>.', ask: DISTASK,
+    fig: 'fig13a', figLabel: 'Stock Returns distribution', ans: '', why: 'Look for separated values (outliers), then which way the tail points. The mean is pulled toward the tail. Skewed data or outliers call for median and IQR.' },
+  { id: '13b', cat: 5, value: 300, stem: DIST + ' This clue: <b>Student GPA</b>.', ask: DISTASK,
+    fig: 'fig13b', figLabel: 'Student GPA distribution', ans: '', why: 'Look for separated values (outliers), then which way the tail points. The mean is pulled toward the tail. Skewed data or outliers call for median and IQR.' },
+  { id: '13c', cat: 5, value: 400, stem: DIST + ' This clue: <b>Actress Age</b>.', ask: DISTASK,
+    fig: 'fig13c', figLabel: 'Actress Age distribution', ans: '', why: 'Look for separated values (outliers), then which way the tail points. The mean is pulled toward the tail. Skewed data or outliers call for median and IQR.' },
+  { id: '4', cat: 5, value: 500, stem: STEPH, ask: 'Which of the following inequalities represent the amount of custom items she can make in a week? Say <b>Yes or No</b> for each.',
+    work: 'a.&nbsp; x \u2264 8<br>b.&nbsp; x &gt; 8<br>c.&nbsp; x + y \u2264 20<br>d.&nbsp; x ' + M_ + ' y \u2265 20<br>e.&nbsp; x &gt; 0<br>f.&nbsp; y \u2265 0',
+    ans: 'Yes: c and f. No: a, b, d, and e.', why: 'All items together are limited by x + y \u2264 20, and she can’t make a negative number of short-sleeved shirts (y \u2265 0). The limit of 8 is on short-sleeved shirts (y), not tank tops (x), so a is not right. And x &gt; 0 would not allow zero tank tops.' }
+];
+
+var SLOTS = [
+  { id: 'fig5', label: '#5: the region graph (Stephanie’s boutique)', ph: 'Example: Region B' },
+  { id: 'fig12', label: '#12: the four box plots (study hours)', ph: 'Example: d, a, c, b' },
+  { id: 'fig13a', label: '#13: Stock Returns distribution', ph: 'Outliers: ___. Shape: ___. Mean vs. median: ___. Center: ___. Spread: ___.' },
+  { id: 'fig13b', label: '#13: Student GPA distribution', ph: 'Outliers: ___. Shape: ___. Mean vs. median: ___. Center: ___. Spread: ___.' },
+  { id: 'fig13c', label: '#13: Actress Age distribution', ph: 'Outliers: ___. Shape: ___. Mean vs. median: ___. Center: ___. Spread: ___.' }
+];
+
+/* ---------- storage ---------- */
+var GKEY = 'm1-jeopardy-game-v1', FKEY = 'm1-jeopardy-figs-v1';
+var G = null, FIGSTORE = {}, saveWarn = '';
+try { var rg = window.localStorage.getItem(GKEY); if (rg) { G = JSON.parse(rg); if (!G || !G.teams) G = null; } } catch (e) { G = null; }
+try { var rf = window.localStorage.getItem(FKEY); if (rf) FIGSTORE = JSON.parse(rf) || {}; } catch (e) { FIGSTORE = {}; }
+function saveG() { try { window.localStorage.setItem(GKEY, JSON.stringify(G)); } catch (e) { } }
+function saveF() { try { window.localStorage.setItem(FKEY, JSON.stringify(FIGSTORE)); saveWarn = ''; return true; } catch (e) { saveWarn = 'This browser could not save the figures (storage may be full or blocked). They will be lost when you close the page.'; return false; } }
+
+/* ---------- state ---------- */
+var S = { teamCount: 3, names: ['Team 1', 'Team 2', 'Team 3', 'Team 4', 'Team 5', 'Team 6'] };
+var MODAL = null;   // {clue, stage, team, wager, marks, dd}
+var PANEL = false, ACTIVE_SLOT = null;
+var TM = { id: null, left: 30 };
+var byId = {};
+CLUES.forEach(function (c) { byId[c.id] = c; });
+
+function grid() {
+  var cols = [];
+  for (var i = 0; i < CATS.length; i++) cols.push(CLUES.filter(function (c) { return c.cat === i; }).sort(function (a, b) { return a.value - b.value; }));
+  return cols;
+}
+
+function newGame() {
+  var teams = [];
+  for (var i = 0; i < S.teamCount; i++) teams.push({ name: (S.names[i] || ('Team ' + (i + 1))).trim() || ('Team ' + (i + 1)), score: 0 });
+  var pool = CLUES.filter(function (c) { return c.value >= 300; });
+  var dd = {};
+  while (Object.keys(dd).length < 2) { var pick = pool[Math.floor(Math.random() * pool.length)]; dd[pick.id] = true; }
+  G = { teams: teams, used: {}, dd: dd };
+  saveG();
+}
+
+/* ---------- views ---------- */
+function topButtons() {
+  var h = '<button class="btn small" data-act="figs">Add figures and answers</button>';
+  if (G) h += '<button class="btn small" data-act="newgame">New game</button>';
+  $('topbtns').innerHTML = h;
+}
+
+function setupView() {
+  var n = S.teamCount, h = '<section class="panel"><h2>Set up the game</h2><p>Each team picks a tile, reads the clue, and answers. Two tiles hide a Daily Double. Scores save in this browser, so you can pick up where you left off.</p>';
+  h += '<div id="countlbl" style="font-weight:700">How many teams?</div><div class="count" role="group" aria-labelledby="countlbl">';
+  for (var k = 2; k <= 6; k++) h += '<button data-act="teams" data-n="' + k + '" aria-pressed="' + (k === n) + '">' + k + '</button>';
+  h += '</div><div class="names">';
+  for (var i = 0; i < n; i++) h += '<div><label for="tn' + i + '">Team ' + (i + 1) + ' name</label><input id="tn' + i + '" data-team="' + i + '" value="' + esc(S.names[i]) + '" maxlength="24"></div>';
+  h += '</div><button class="btn primary" data-act="start">Start game</button></section>';
+  var missing = SLOTS.filter(function (s) { return !(FIGSTORE[s.id] && FIGSTORE[s.id].img); }).length;
+  if (missing) h += '<p class="hint">Heads up: ' + missing + ' clues use pictures from your study guide. Use “Add figures and answers” above to add them before you play.</p>';
+  return h;
+}
+
+function boardView() {
+  var cols = grid(), h = '<div class="board-wrap"><div class="board">';
+  CATS.forEach(function (c) { h += '<div class="cat">' + esc(c) + '</div>'; });
+  var rows = 5;
+  for (var r = 0; r < rows; r++) {
+    for (var c = 0; c < CATS.length; c++) {
+      var clue = cols[c][r];
+      if (!clue) { h += '<div></div>'; continue; }
+      var used = !!G.used[clue.id];
+      h += '<button class="tile' + (used ? ' used' : '') + '" data-act="tile" data-id="' + clue.id + '"' + (used ? ' disabled aria-label="' + esc(CATS[c]) + ' ' + clue.value + ', already played"' : ' aria-label="' + esc(CATS[c]) + ' for ' + clue.value + '"') + '>' + (used ? '' : '$' + clue.value) + '</button>';
+    }
+  }
+  h += '</div></div>';
+  var left = CLUES.filter(function (c) { return !G.used[c.id]; }).length;
+  h += '<div class="score-row" aria-label="Scoreboard">' + G.teams.map(function (t, i) {
+    return '<div class="team"><span class="nm">' + esc(t.name) + '</span><span class="sc' + (t.score < 0 ? ' neg' : '') + '">' + (t.score < 0 ? M_ : '') + '$' + Math.abs(t.score) + '</span>' +
+      '<div class="adj"><button data-act="adj" data-i="' + i + '" data-d="-100" aria-label="Subtract 100 from ' + esc(t.name) + '">' + M_ + '100</button><button data-act="adj" data-i="' + i + '" data-d="100" aria-label="Add 100 to ' + esc(t.name) + '">+100</button></div></div>';
+  }).join('') + '</div>';
+  h += '<p class="hint">' + (left ? left + ' clues left.' : 'All clues played. Final scores are above.') + ' Use the ' + M_ + '100 and +100 buttons to fix a score.</p>';
+  return h;
+}
+
+function figHTML(c) {
+  if (!c.fig) return '';
+  var f = FIGSTORE[c.fig];
+  if (f && f.img) return '<div class="figbox"><img src="' + f.img + '" alt="Figure for this clue: ' + esc(c.figLabel) + '"></div>';
+  return '<div class="nofig"><b>No figure added yet.</b> Close this clue, choose “Add figures and answers” at the top, and add the ' + esc(c.figLabel) + ' from your study guide.</div>';
+}
+
+function answerText(c) {
+  if (c.fig) {
+    var f = FIGSTORE[c.fig];
+    return (f && f.ans && f.ans.trim()) ? esc(f.ans).replace(/\n/g, '<br>') : '<i>No answer saved yet. Add it under “Add figures and answers.”</i>';
+  }
+  return c.ans;
+}
+
+function modalView() {
+  var m = MODAL, c = m.clue, pts = m.dd ? m.wager : c.value;
+  var h = '<div class="overlay" role="dialog" aria-modal="true" aria-label="Clue"><div class="card">';
+  h += '<div class="card-head"><span class="cn">' + esc(CATS[c.cat]) + '</span><span class="pv">' + (m.dd ? 'Daily Double: $' + m.wager : '$' + c.value) + '</span></div>';
+  if (m.stage === 'dd') {
+    h += '<div class="dd-banner">Daily Double!</div><p style="font-size:20px;margin:0 0 8px">Pick the team that chose this tile, then set the wager.</p>';
+    h += '<div class="pick" role="group" aria-label="Team">' + G.teams.map(function (t, i) { return '<button data-act="ddteam" data-i="' + i + '" aria-pressed="' + (m.team === i) + '">' + esc(t.name) + '</button>'; }).join('') + '</div>';
+    var mx = m.team === null ? 500 : Math.max(G.teams[m.team].score, 500);
+    h += '<div class="wager"><label for="wg" style="font-weight:700">Wager</label><input id="wg" type="number" min="0" max="' + mx + '" step="100" value="' + m.wager + '"><span class="hint" style="margin:0">Up to $' + mx + '</span></div>';
+    if (m.warn && m.team === null) h += '<p class="msg">Pick the team that chose this tile first.</p>';
+    h += '<div class="acts"><button class="btn primary" data-act="ddgo">Show the clue</button><button class="btn" data-act="cancel">Back to board</button></div>';
+    return h + '</div></div>';
+  }
+  h += '<p class="stem">' + c.stem + '</p>';
+  if (c.work) h += '<div class="work">' + c.work + '</div>';
+  if (c.duo) h += '<div class="duo">' + c.duo.map(function (d) { return '<div><h3>' + d.h + '</h3><div class="work">' + d.t + '</div></div>'; }).join('') + '</div>';
+  h += figHTML(c);
+  h += '<p class="ask">' + c.ask + '</p>';
+  if (m.stage === 'clue') {
+    h += '<div class="acts"><button class="btn primary" data-act="reveal">Show answer</button>';
+    h += '<button class="btn" data-act="timer">' + (TM.id ? 'Stop timer' : 'Start 30-second timer') + '</button>';
+    h += '<span class="timer' + (TM.left <= 5 ? ' low' : '') + '" id="tmv" aria-live="off">' + (TM.id || TM.left < 30 ? TM.left : '') + '</span>';
+    h += '<button class="btn" data-act="cancel">Back to board</button></div>';
+  } else {
+    h += '<div class="ans"><div class="al">Answer</div><div class="av">' + answerText(c) + '</div><div class="why">' + c.why + '</div></div>';
+    h += '<div class="award" aria-label="Score this clue">' + G.teams.map(function (t, i) {
+      if (m.dd && i !== m.team) return '';
+      var mk = m.marks[i] || 0;
+      return '<div class="ar"><b>' + esc(t.name) + '</b><span class="row"><button class="btn small good' + (mk === 1 ? ' on' : '') + '" data-act="mark" data-i="' + i + '" data-v="1" aria-pressed="' + (mk === 1) + '">Correct, +$' + pts + '</button>' +
+        '<button class="btn small bad' + (mk === -1 ? ' on' : '') + '" data-act="mark" data-i="' + i + '" data-v="-1" aria-pressed="' + (mk === -1) + '">Wrong, ' + M_ + '$' + pts + '</button></span></div>';
+    }).join('') + '</div>';
+    h += '<div class="acts"><button class="btn primary" data-act="done">Done, back to board</button></div>';
+  }
+  return h + '</div></div>';
+}
+
+function panelView() {
+  var h = '<div class="overlay" role="dialog" aria-modal="true" aria-label="Add figures and answers"><div class="card"><div class="card-head"><span class="cn">Add figures and answers</span><button class="btn small" data-act="closepanel">Close</button></div>';
+  h += '<p style="color:var(--muted);max-width:62ch;margin:0 0 14px">Five clues use pictures from your study guide, so they need a screenshot and an answer. Add a screenshot of each figure and type the answer you want to show. Everything is saved in this browser only, so set it up on the computer you’ll present from.</p>';
+  if (saveWarn) h += '<p class="msg">' + esc(saveWarn) + '</p>';
+  SLOTS.forEach(function (s) {
+    var f = FIGSTORE[s.id] || {};
+    h += '<div class="slot"><h3>' + esc(s.label) + '</h3><div class="sr">';
+    h += '<div>' + (f.img ? '<img src="' + f.img + '" alt="Saved figure for ' + esc(s.label) + '">' : '<div class="pz" style="min-width:200px">No image yet</div>') + '</div>';
+    h += '<div class="grow"><div class="row"><label class="btn small" for="file-' + s.id + '" style="cursor:pointer">Choose an image</label><input id="file-' + s.id + '" type="file" accept="image/*" data-slot="' + s.id + '" style="position:absolute;opacity:0;width:1px;height:1px">' +
+      (f.img ? '<button class="btn small" data-act="rmimg" data-slot="' + s.id + '">Remove image</button>' : '') + '</div>';
+    h += '<button class="pz' + (ACTIVE_SLOT === s.id ? ' active' : '') + '" data-act="pastezone" data-slot="' + s.id + '" style="display:block;width:100%;text-align:left;margin-top:8px">' + (ACTIVE_SLOT === s.id ? 'Ready: press Ctrl+V (or ⌘+V) to paste a screenshot' : 'Or click here, then press Ctrl+V (or ⌘+V) to paste a screenshot') + '</button></div></div>';
+    h += '<label for="ans-' + s.id + '" style="display:block;margin-top:10px;font-weight:700">Answer to show</label><textarea id="ans-' + s.id + '" data-ans="' + s.id + '" placeholder="' + esc(s.ph) + '">' + esc(f.ans || '') + '</textarea></div>';
+  });
+  return h + '</div></div>';
+}
+
+function render() {
+  topButtons();
+  $('app').innerHTML = G ? boardView() : setupView();
+  var layer = $('layer');
+  if (PANEL) layer.innerHTML = panelView();
+  else if (MODAL) layer.innerHTML = modalView();
+  else layer.innerHTML = '';
+}
+
+/* ---------- timer ---------- */
+function stopTimer(reset) { if (TM.id) { clearInterval(TM.id); TM.id = null; } if (reset) TM.left = 30; }
+function startTimer() {
+  TM.left = 30;
+  TM.id = setInterval(function () {
+    TM.left--;
+    var el = $('tmv');
+    if (el) { el.textContent = TM.left; el.classList.toggle('low', TM.left <= 5); }
+    if (TM.left <= 0) { clearInterval(TM.id); TM.id = null; if (el) el.textContent = 'Time!'; if (MODAL) render(); }
+  }, 1000);
+}
+
+/* ---------- figure images ---------- */
+function processImage(file, slot) {
+  if (!file || !/^image\//.test(file.type)) return;
+  var fr = new FileReader();
+  fr.onload = function () {
+    var img = new Image();
+    img.onload = function () {
+      var max = 900, sc = Math.min(1, max / img.width), w = Math.round(img.width * sc), hh = Math.round(img.height * sc);
+      var cv = document.createElement('canvas'); cv.width = w; cv.height = hh;
+      var ctx = cv.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, hh); ctx.drawImage(img, 0, 0, w, hh);
+      var data = cv.toDataURL('image/jpeg', 0.88);
+      FIGSTORE[slot] = FIGSTORE[slot] || {};
+      FIGSTORE[slot].img = data;
+      saveF(); render();
+    };
+    img.src = fr.result;
+  };
+  fr.readAsDataURL(file);
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('[data-act]');
+  if (!b || b.disabled) return;
+  var a = b.getAttribute('data-act');
+  if (a === 'teams') { S.teamCount = parseInt(b.getAttribute('data-n'), 10); render(); }
+  else if (a === 'start') { newGame(); render(); }
+  else if (a === 'newgame') { if (b.getAttribute('data-sure')) { G = null; try { window.localStorage.removeItem(GKEY); } catch (er) { } render(); } else { b.setAttribute('data-sure', '1'); b.textContent = 'Click again to confirm'; } }
+  else if (a === 'figs') { PANEL = true; render(); }
+  else if (a === 'closepanel') { PANEL = false; ACTIVE_SLOT = null; render(); }
+  else if (a === 'rmimg') { var s1 = b.getAttribute('data-slot'); if (FIGSTORE[s1]) { delete FIGSTORE[s1].img; saveF(); } render(); }
+  else if (a === 'pastezone') { ACTIVE_SLOT = b.getAttribute('data-slot'); render(); }
+  else if (a === 'adj') { var t = G.teams[parseInt(b.getAttribute('data-i'), 10)]; t.score += parseInt(b.getAttribute('data-d'), 10); saveG(); render(); }
+  else if (a === 'tile') {
+    var c = byId[b.getAttribute('data-id')]; stopTimer(true);
+    var isDD = !!G.dd[c.id];
+    MODAL = { clue: c, stage: isDD ? 'dd' : 'clue', team: null, wager: 200, marks: {}, dd: isDD };
+    render();
+  }
+  else if (a === 'ddteam') { MODAL.team = parseInt(b.getAttribute('data-i'), 10); var mx = Math.max(G.teams[MODAL.team].score, 500); if (MODAL.wager > mx) MODAL.wager = mx; render(); }
+  else if (a === 'ddgo') {
+    if (MODAL.team === null) { MODAL.warn = true; render(); return; }
+    var inp = $('wg'), w = inp ? parseInt(inp.value, 10) : MODAL.wager, mx2 = Math.max(G.teams[MODAL.team].score, 500);
+    if (isNaN(w) || w < 0) w = 0; if (w > mx2) w = mx2;
+    MODAL.wager = w; MODAL.stage = 'clue'; render();
+  }
+  else if (a === 'reveal') { stopTimer(false); MODAL.stage = 'answer'; render(); }
+  else if (a === 'timer') { if (TM.id) { stopTimer(true); } else { startTimer(); } render(); }
+  else if (a === 'cancel') { stopTimer(true); MODAL = null; render(); }
+  else if (a === 'mark') {
+    var i = parseInt(b.getAttribute('data-i'), 10), v = parseInt(b.getAttribute('data-v'), 10);
+    MODAL.marks[i] = (MODAL.marks[i] === v) ? 0 : v; render();
+  }
+  else if (a === 'done') {
+    var pts = MODAL.dd ? MODAL.wager : MODAL.clue.value;
+    Object.keys(MODAL.marks).forEach(function (k) { G.teams[k].score += MODAL.marks[k] * pts; });
+    G.used[MODAL.clue.id] = true; saveG(); stopTimer(true); MODAL = null; render();
+  }
+});
+document.addEventListener('input', function (e) {
+  var t = e.target;
+  if (t.hasAttribute('data-team')) { S.names[parseInt(t.getAttribute('data-team'), 10)] = t.value; }
+  else if (t.hasAttribute('data-ans')) { var id = t.getAttribute('data-ans'); FIGSTORE[id] = FIGSTORE[id] || {}; FIGSTORE[id].ans = t.value; saveF(); }
+  else if (t.id === 'wg') { var w = parseInt(t.value, 10); if (!isNaN(w) && MODAL) MODAL.wager = w; }
+});
+document.addEventListener('change', function (e) {
+  var t = e.target;
+  if (t.type === 'file' && t.hasAttribute('data-slot')) { processImage(t.files && t.files[0], t.getAttribute('data-slot')); }
+});
+document.addEventListener('paste', function (e) {
+  if (!PANEL || !ACTIVE_SLOT) return;
+  var items = (e.clipboardData && e.clipboardData.items) || [];
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].type && items[i].type.indexOf('image') === 0) { e.preventDefault(); processImage(items[i].getAsFile(), ACTIVE_SLOT); return; }
+  }
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') {
+    if (PANEL) { PANEL = false; ACTIVE_SLOT = null; render(); }
+    else if (MODAL && MODAL.stage !== 'answer') { stopTimer(true); MODAL = null; render(); }
+  }
+});
+
+render();
+</script>
+</body>
+</html>
